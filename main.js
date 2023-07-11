@@ -21,12 +21,15 @@ ipcMain.on("user:login", (event, data) => {
 
   // console.log(data);
     axios.post('http://127.0.0.1:8000/api/login', data ).then(response =>{
-        // if(response.data.error){
-        //     console.log(response)
-        // }else{
-        //     console.log('success', response)
-        // }
-        console.log('dddd', response);
+        if(response.data.error){
+            console.log(response)
+            event.reply("login-failed", err.errorSummary);
+            return;
+        }else{
+          user = response.user;
+          openHome();
+          console.log('success', response)
+        }
     } )
 
 

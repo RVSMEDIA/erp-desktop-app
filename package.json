@@ -1,0 +1,56 @@
+{
+  "name": "erp",
+  "version": "1.0.0",
+  "description": "auth",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "electron-builder",
+    "dev": "electron .",
+    "start": "electron-forge start",
+    "build": "electron-builder",
+    "build:win": "electron-builder build --win"
+  },
+  "keywords": [],
+  "author": "Mandeep Singh",
+  "license": "ISC",
+  "devDependencies": {
+    "body-parser": "^1.20.2",
+    "electron": "^24.2.0",
+    "electron-builder": "^23.6.0"
+  },
+  "build": {
+    "appId": "com.example.app",
+    "asar": false,
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon.png"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png"
+    }
+  },
+  "dependencies": {
+    "@okta/okta-auth-js": "^7.3.0",
+    "axios": "^1.4.0",
+    "csv-parser": "^3.0.0",
+    "ejs": "^3.1.9",
+    "electron-reload": "^2.0.0-alpha.1",
+    "express": "^4.18.2",
+    "html-pdf": "^3.0.1"
+  }
+}

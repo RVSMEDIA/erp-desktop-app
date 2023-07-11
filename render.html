@@ -1,0 +1,521 @@
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>RVS Management</title>
+      <style>
+         .salary-slip{
+         margin: 15px;
+         }
+         .empDetail {
+         width: 100%;
+         text-align: left;
+         border: 2px solid black;
+         border-collapse: collapse;
+         table-layout: fixed;
+         }
+         .empDetailFirst {
+         width: 100%;
+         text-align: left;
+         border-collapse: collapse;
+         table-layout: fixed;
+         }
+         .head {
+         margin: 10px;
+         margin-bottom: 50px;
+         width: 100%;
+         }
+         .companyName {
+         text-align: right;
+         font-size: 25px;
+         font-weight: bold;
+         }
+         .salaryMonth {
+         text-align: center;
+         }
+         .table-border-bottom {
+         border-bottom: 1px solid;
+         }
+         .table-border-right {
+         border-right: 1px solid;
+         }
+         .myBackground {
+         padding-top: 10px;
+         text-align: left;
+         border: 1px solid black;
+         height: 40px;
+         }
+         .myAlign {
+         border-right: 1px solid black;
+         }
+         .myTotalBackground {
+         padding-top: 10px;
+         text-align: left;
+         background-color: #EBF1DE;
+         border-spacing: 0px;
+         }
+         .align-4 {
+         width: 25%;
+         float: left;
+         }
+         .tail {
+         margin-top: 35px;
+         }
+         .align-2 {
+         margin-top: 25px;
+         width: 50%;
+         float: left;
+         }
+         .border-center {
+         text-align: center;
+         }
+         .border-center th, .border-center td {
+         border: 1px solid black;
+         }
+         th, td {
+         padding-left: 6px;
+         }
+
+         .uperleft {
+         text-align: left;
+         font-size: 20px;
+         font-weight: bold;
+         }
+         .uperleft {
+         text-align: left;
+         font-size: 20px;
+         font-weight: bold;
+         }
+         .logo-container {
+            text-align: center; /* or use float:left or float:right to position the logo */
+          }
+          
+          .logo-container img {
+            height: 50px; /* adjust height to your needs */
+          }
+      </style>
+   </head>
+   <body>
+
+      <!-- <div class="logo-container">
+         <img src="https://www.rvsmedia.co.uk/wp-content/uploads/2020/01/rvs_logonew.png" style="height:10%;width:8%">
+      </div> -->
+      <!-- <hr style="border: none;border-bottom: 2px solid black;"> -->
+
+      <div class="salary-slip" >
+         <table class="empDetailFirst">
+
+            <tr height="1px" style='background-color: #fff'>
+              
+               <h4 style="text-align: center; margin-top:5%;">RVS MEDIA INDIA PVT LTD </h4>
+            </tr>
+            
+            <div class="logo-container">
+               <img src="https://www.rvsmedia.co.uk/wp-content/uploads/2020/01/rvs_logonew.png" style="height:10%;width:8%">
+            </div>
+
+            <tr height="8px" style='background-color: #fff'>
+               <hr style="border: none;border-bottom: 2px solid black;margin-top:4%;">
+               <h4 style="text-align: center;">Pay slip for the month of Jan, 2023</h4>
+            </tr>
+
+            <tr>
+               <th colspan='1'>
+                  Employee Name: 
+               </th>
+               <td colspan='1'>
+                  Jasjeet Khipal
+               </td>
+               <th colspan='1'>
+                  Designation:
+               </th>
+               <td colspan='1'>
+                  software Engineer
+               </td>
+               
+            </tr>
+            <tr>
+               <th>
+                  Employee Code:
+               </th>
+               <td>
+                  R44
+               </td>
+               <th>
+                  Father Name:
+               </th>
+               <td>
+                  Fahter name
+               </td>
+               
+            </tr>
+            <tr>
+               <th>
+                  Branch:
+               </th>
+               <td>
+                  Jalandhar
+               </td>
+               <th>
+                  Month:
+               </th>
+               <td>
+                  Jan, 2023
+               </td>
+               
+            </tr>
+            <tr>
+               <th>
+                  Basic Salary:
+               </th>
+               <td>
+                  3455
+               </td>
+               <th>
+                  PAN:
+               </th>
+               <td>
+                  EGFD4432
+               </td>
+               
+            </tr>
+            <tr>
+               <th>
+                  Working Days:
+               </th>
+               <td>
+                  15
+               </td>
+               <th>
+                  Pay Days:
+               </th>
+               <td>
+                  15
+               </td>
+               
+            </tr>
+            <tr>
+               <th>
+                  Payment Mode:
+               </th>
+               <td>
+                  banktransfer
+               </td>
+               <th>
+                  Bank A/C No:
+               </th>
+               <td>
+                  5456565656
+               </td>
+               
+            </tr>
+            <tr>
+               <th>
+                  UAN:
+               </th>
+               <td>
+                  453676657
+               </td>
+               <th>
+                  DOJ:
+               </th>
+               <td>
+                  5/4/2023
+               </td>
+               
+            </tr>
+          
+         </table >
+      </div >
+
+
+      <div class="salary-slip" >
+         <table class="empDetail">
+            
+            <tr class="myBackground">
+
+               <th colspan="3" class="table-border-right">
+                  Earnings and Reimbursements
+               </th>
+               <th colspan="2" class="table-border-right">
+                  Amount (Rs.)
+               </th>
+              
+               <th colspan="3" class="table-border-right">
+                  Deductions
+               </th>
+               
+               <th colspan="2">
+                  Amount (Rs.)
+               </th>
+            </tr>
+            <tr>
+
+               <th colspan="3" class="myAlign">
+                  Basic Salary
+               </th>
+               <td class="myAlign" colspan="2">
+                  Rs.899858
+               </td>
+               <th colspan="3" class="myAlign">
+                  Tax Deduction at Source (TDS)
+               </th >
+               <td class="" colspan="2">
+                  6009
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3" class="myAlign">
+                  House Rent Allowance
+               </th>
+               <td class="myAlign" colspan="2">
+                  4566
+               </td>
+               <th colspan="3" class="myAlign">
+                  Employee Provident Fund (EPF)
+               </th >
+               <td class="" colspan="2">
+                  45777
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3"  class="myAlign">
+                  City Allowance
+               </th>
+               <td class="myAlign" colspan="2">
+                  2457
+               </td>
+               <th colspan="3" class="myAlign">
+                  Employee State Insurance (ESI)
+               </th >
+               <td colspan="2">
+                  0
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3"  class="myAlign">
+                  Mobile and Internet Allowance
+               </th>
+               <td class="myAlign" colspan="2">
+                  8644
+               </td>
+               <th colspan="3" class="myAlign">
+                  Professional Tax
+               </th >
+               <td class="" colspan="2">
+                  0
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3"  class="myAlign">
+                  Leave Travel Allowance
+               </th>
+               <td class="myAlign" colspan="2">
+                  789
+               </td>
+               <th colspan="3" class="myAlign">
+                  Other Deductions
+               </th >
+               <td class="" colspan="2">
+                  0
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3"  class="myAlign">
+                  Special Allowance
+               </th>
+               <td class="myAlign" colspan="2">
+                  899
+               </td>
+               <th colspan="3" class="myAlign">
+                  
+               </th >
+               <td class="" colspan="2">
+                  
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3"  class="myAlign">
+                  Others
+               </th>
+               <td class="myAlign" colspan="2">
+                  12
+               </td>
+               <th colspan="3" class="myAlign">
+                
+               </th >
+               <td class="" colspan="2">
+                 
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3"  class="myAlign">
+                  Tenure Bonus
+               </th>
+               <td class="myAlign" colspan="2">
+                  31
+               </td>
+               <th colspan="3" class="myAlign">
+                  
+               </th >
+               <td class="" colspan="2">
+                  
+               </td>
+            </tr >
+            <tr>
+
+               <th colspan="3"  class="myAlign">
+                  Statutory Bonus
+               </th>
+               <td class="myAlign" colspan="2">
+                  0
+               </td>
+               <th colspan="3" class="myAlign">
+                  
+               </th >
+               <td class="" colspan="2">
+                  
+               </td>
+            </tr >
+
+            
+            
+           
+
+
+            <tr class="myBackground">
+               <th colspan="3"  class="myAlign">
+                  Total Earnings
+               </th>
+               <td class="myAlign" colspan="2">
+                  4455
+               </td>
+               <th colspan="3" class="myAlign">
+                  Total Deductions
+               </th >
+               <td class="myAlign" colspan="2">
+                  342
+               </td>
+            </tr >
+
+            <tr class="myBackground">
+               <th colspan="5"  class="myAlign">
+                  
+               </th>
+               
+               <th colspan="3" class="myAlign">
+                  Net Pay
+               </th >
+               <td class="myAlign" colspan="2">
+                  Rs. 8363
+               </td>
+            </tr >
+
+
+         </table >
+      </div >
+
+      <div class="salary-slip" >
+         <table class="empDetailFirst">
+            <tr style='background-color: #fff'>
+              
+               <h4 style="text-align: left;">[Salary drawn in this financial year: Rs.3432 ]</h4>
+            </tr>
+          
+         </table >
+      </div >
+      
+      <div class="salary-slip" >
+
+         <!-- <table class="empDetail">
+            <tr style='background-color: #fff'>
+                 
+               <h4 style="text-align: center;">Tax Deduction Details(Rs.)</h4>
+            </tr>
+            
+            <tr class="myBackground">
+               <th colspan="2" class="myAlign">Month </th>
+               <td class="myAlign">Leaves taken during month</td>
+               <td class="myAlign">Closing balance leaves</td>
+               <td class="myAlign">Apr22</td>
+               <td class="myAlign">May22</td>
+               <td class="myAlign">Jun22</td>
+               <td class="myAlign">Jul22</td>
+               <td class="myAlign">Aug22</td>
+               <td class="myAlign">Sep22</td>
+               <td class="myAlign">Oct22</td>
+               <td class="myAlign">Nov22</td>
+               <td class="myAlign">Dec22</td>
+               <td class="myAlign">Jan23</td>
+            </tr>
+            <tr>
+               <th colspan="2" class="myAlign">Deduction </th>
+               <td class="myAlign">342</td>
+               <td class="myAlign">8363</td>
+               <td class="myAlign">3432</td>
+               <td class="myAlign">4</td>
+               <td class="myAlign">6</td>
+               <td class="myAlign">7</td>
+               <td class="myAlign">3526</td>
+               <td class="myAlign">4566</td>
+               <td class="myAlign">5654</td>
+               <td class="myAlign">5654</td>
+               <td class="myAlign">4534</td>
+               <td class="myAlign">4544</td>
+            </tr>
+
+         </table > -->
+
+
+         <table class="empDetail" height="20px">
+            
+            <tr class="myBackground">
+               <td colspan="3" class="myAlign border-center">Opening balance of leaves </td>
+               <td colspan="3" class="myAlign border-center">Leaves taken during month</td>
+               <td colspan="3" class="myAlign border-center">Closing balance leaves</td>
+            </tr>
+            <tr>
+               <td colspan="3" class="myAlign border-center">4 </td>
+               <td colspan="3" class="myAlign border-center">6</td>
+               <td colspan="3" class="myAlign border-center">7</td>
+            </tr>
+
+         </table >
+
+
+         
+         
+         
+        </div >
+        <h4 style="text-align:center;margin-top:7%;">This is computer generated salary slip</h4>
+        <hr style="border: none;border-bottom: 2px solid black;">
+        <!-- <div class="logo-container">
+            <img src="https://www.rvsmedia.co.uk/wp-content/uploads/2020/01/rvs_logonew.png" style="height:10%;width:8%">
+        </div> -->
+
+
+      
+      
+   </body>
+   </html>    
+         
+        </div >
+        <h4 style="text-align:center;margin-top:7%;">This is computer generated salary slip</h4>
+        <hr style="border: none;border-bottom: 2px solid black;">
+        <!-- <div class="logo-container">
+            <img src="https://www.rvsmedia.co.uk/wp-content/uploads/2020/01/rvs_logonew.png" style="height:10%;width:8%">
+        </div> -->
+
+
+      
+      
+   </body>
+   </html>

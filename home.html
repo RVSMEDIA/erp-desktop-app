@@ -11,7 +11,9 @@
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     window.electron.getUser().then((user) => {
-      document.getElementById("username").innerHTML = `${user.profile.firstName} ${user.profile.lastName}`
+      console.log(user);
+      // document.getElementById("username").innerHTML = `${user.first_name} ${user.last_name}`
+      document.getElementById("username").innerHTML = `${user}`
     });
   });
 

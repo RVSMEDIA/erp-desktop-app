@@ -77,7 +77,8 @@ app.on('ready', () => {
     if (req.session.isAuthenticated) {
       next();
     } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      // res.status(401).json({ message: 'Unauthorized' });
+      res.redirect('/');
     }
   }
 
@@ -123,12 +124,13 @@ app.on('ready', () => {
             // event.reply("login-failed", err.errorSummary);
             return;
         }else{
-          user = response.user;
+          user = response.data.user;
           
           // Store the user object in the session
-          req.session.user = JSON.stringify(response);
-
-          console.log('success', response)
+          // req.session.user = JSON.stringify(response);
+          req.session.user = user;
+          
+          console.log('success', user)
 
           res.redirect('/dashboard');
         }

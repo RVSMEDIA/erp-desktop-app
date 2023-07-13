@@ -47,12 +47,12 @@ function createAboutWindow() {
 function createWindow() {
   mainWindow = new BrowserWindow(
     { 
-        width: 700,
+        width: 1700,
         height: 450
     });
 
     // open dev tools
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
   mainWindow.loadURL('http://localhost:3005');
 
@@ -80,8 +80,7 @@ app.on('ready', () => {
     if (req.session.isAuthenticated) {
       next();
     } else {
-      // res.status(401).json({ message: 'Unauthorized' });
-      res.redirect('/');
+      res.redirect('/login');
     }
   }
 
@@ -132,8 +131,7 @@ app.on('ready', () => {
           // Store the user object in the session
           // req.session.user = JSON.stringify(response);
           req.session.user = user;
-
-          console.log('success', user)
+          // console.log('success', user)
 
           res.redirect('/dashboard');
         }
@@ -145,76 +143,7 @@ app.on('ready', () => {
       // res.render('index', { results: resultsJSON});
   });
 
-
  
-
-  expressApp.post('/create-html', function(req, res) {
-    // Render the Handlebars template with the data
-    const dd = req.body.data;
-    const id = req.body.id;
-    const headers = req.body.headers;
-    const data =  {
-      data: dd,
-      headers: headers,
-      image_url: 'http://localhost:3005/logo.png',
-    };
-  
-  
-    
-    console.log(data._0)
-    // res.send(data);
-    
-    // const template = fs.readFileSync('template.ejs', 'utf-8');
-
-    const templatePath = path.join(__dirname, 'template.ejs');
-
-    const template = fs.readFileSync(templatePath, 'utf-8');
-    
-    const html = ejs.render(template, data);
-    
-    // res.send(html)
-    
-    var EmployeName = dd._0
-    EmployeName = createSlug(EmployeName)
-    var pdfFileName = `${downloadDir}/${folderName}/${EmployeName}.pdf`
-  
-    // const filePath = 'render.html';
-    const filePath = path.join(__dirname, 'render.html');
-  fs.writeFile(filePath, html, (err) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log(`File "${filePath}" written successfully`);
-    }
-  });
-  
-  const options = {
-      format: 'Letter',
-      border: {
-        top: '1px',
-        right: '1px',
-        bottom: '1px',
-        left: '1px'
-      },
-      footer: {
-        height: '15mm',
-        
-      }
-    };
-  
-  pdf.create(html, options).toFile(pdfFileName, (err, res) => {
-    if (err) return console.log(err);
-    console.log(res); // { filename: '/app/businesscard.pdf' }
-  });
-  
-  res.send({
-    'pdfFileName' : pdfFileName,
-    'id' : id,
-  })
-  
-  });
-
-
   expressApp.get('/', (req, res) => {
     const data = {
         message: 'Hello from Express!'
@@ -226,17 +155,20 @@ app.on('ready', () => {
   expressApp.get('/about', (req, res) => {
     res.render('about');
   });
+  expressApp.get('/login', (req, res) => {
+    res.render('login');
+  });
   
   expressApp.get('/contact', (req, res) => {
     res.render('contact');
   });
 
-  expressApp.get('/dashboard', (req, res) => {
+  expressApp.get('/dashboard', isAuthenticated, (req, res) => {
   // Access the user object from the session
   const user = req.session.user;
 
 
-  // res.send(user);
+  console.log( 'usersing : => ' ,user);
   res.render('dashboard', { user});
 
   });

@@ -1,5 +1,5 @@
 {
-  "name": "erp",
+  "name": "auth",
   "version": "1.0.0",
   "description": "auth",
   "main": "main.js",

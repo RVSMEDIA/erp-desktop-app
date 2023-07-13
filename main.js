@@ -69,7 +69,10 @@ app.on('ready', () => {
   expressApp.use(session({
     secret: 'your-secret-key',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 12 * 60 * 60 * 1000 // 12 hours
+    }
   }));
 
   // Middleware to check if the user is authenticated
@@ -129,7 +132,7 @@ app.on('ready', () => {
           // Store the user object in the session
           // req.session.user = JSON.stringify(response);
           req.session.user = user;
-          
+
           console.log('success', user)
 
           res.redirect('/dashboard');

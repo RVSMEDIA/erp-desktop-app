@@ -134,6 +134,22 @@ app.on('ready', () => {
             return;
         }else{
           user = response.data.user;
+
+          // Convert data to JSON format
+          const jsonData = JSON.stringify(user);
+
+          // Specify the file path
+          const filePath = 'data.json';
+
+          // Write data to the JSON file
+          fs.writeFile(filePath, jsonData, (err) => {
+            if (err) {
+              console.error('Error writing JSON file:', err);
+            } else {
+              console.log('Data written to JSON file successfully.');
+            }
+          });
+
           
           // Store the user object in the session
           // req.session.user = JSON.stringify(response);
@@ -167,6 +183,8 @@ app.on('ready', () => {
   });
 
   expressApp.get('/login', (req, res) => {
+
+    userLogin();
     res.render('login');
   });
   
@@ -331,6 +349,39 @@ async function uploadImage(imagePath, uploadUrl) {
 
 
 
+
+function userLogin() {
+
+  // Specify the file path
+  const filePath = 'data.json';
+
+  // Read the JSON file
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      console.error('Error reading JSON file:', err);
+    } else {
+      try {
+        // Parse the JSON data
+        const jsonData = JSON.parse(data);
+
+        // Check if the desired object exists
+        const hasObject = jsonData.hasOwnProperty('email');
+
+        // Decide session based on the existence of the object
+        if (hasObject) {
+          // Object exists, set session accordingly
+          console.log('Session: Object exists');
+        } else {
+          // Object doesn't exist, set session accordingly
+          console.log('Session: Object does not exist');
+        }
+      } catch (error) {
+        console.error('Error parsing JSON data:', error);
+      }
+    }
+  });
+
+}
 
 // test end
 

@@ -128,7 +128,7 @@ app.on('ready', () => {
     
 
     axios.post('http://erp.test/api/login', data ).then(response =>{
-        if(response.data.error){
+        if(response.data.auth === 'fail'){
             console.log(response)
             // event.reply("login-failed", err.errorSummary);
             return;
@@ -138,6 +138,7 @@ app.on('ready', () => {
           // Store the user object in the session
           // req.session.user = JSON.stringify(response);
           req.session.user = user;
+          req.session.isAuthenticated = true;
           // console.log('success', user)
 
           res.redirect('/dashboard');
@@ -152,23 +153,23 @@ app.on('ready', () => {
 
  
   expressApp.get('/', (req, res) => {
-    const data = {
-        message: 'Hello from Express!'
-      };
-    
-      res.render('index', data);
+    if (req.session.isAuthenticated) {
+      // User session exists, redirect to the dashboard
+      res.redirect('/dashboard');
+    } else {
+      // User session does not exist, redirect to login
+      res.redirect('/login');
+    }
   });
 
   expressApp.get('/about', (req, res) => {
     res.render('about');
   });
+
   expressApp.get('/login', (req, res) => {
     res.render('login');
   });
   
-  expressApp.get('/contact', (req, res) => {
-    res.render('contact');
-  });
   
   expressApp.get('/screenshort', (req, res) => {
     
@@ -185,63 +186,31 @@ app.on('ready', () => {
   });
 
 
+  // expressApp.get('/dashboard', (req, res) => {
+  //   // Access the user object from the session
+  //   const user = req.session.user;
+
+
+  //   console.log( 'usersing : => ' ,user);
+  //   res.render('dashboard', { user});
+
+  //   if (req.session.isAuthenticated) {
+  //     next();
+  //   } else {
+  //     res.redirect('/login');
+  //   }
+
+  // });
 
 
 
-
-  expressApp.get('/dashboard', (req, res) => {
-  // Access the user object from the session
-  const user = req.session.user;
-
-
-  console.log( 'usersing : => ' ,user);
-  res.render('dashboard', { user});
-
-  if (req.session.isAuthenticated) {
-    next();
-  } else {
-    res.redirect('/login');
-  }
-
+  // Route for dashboard
+  expressApp.get('/dashboard', isAuthenticated, (req, res) => {
+    // Render the dashboard view
+    res.render('dashboard');
   });
 
 
-  // function createSlug(str) {
-  //   str = str.replace(/^\s+|\s+$/g, ''); // trim
-  //   str = str.toLowerCase();
-  
-  //   // remove accents, swap ñ for n, etc
-  //   var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-  //   var to   = "aaaaeeeeiiiioooouuuunc------";
-  //   for (var i=0, l=from.length ; i<l ; i++) {
-  //     str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-  //   }
-  
-  //   str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-  //            .replace(/\s+/g, '-') // collapse whitespace and replace by -
-  //            .replace(/-+/g, '-'); // collapse dashes
-  
-  //   return str;
-  // }
-
-
-  // const date = new Date();
-  // const year = date.getFullYear();
-  // const month = String(date.getMonth() + 1).padStart(2, '0'); // add leading zero if necessary
-  // const day = String(date.getDate()).padStart(2, '0'); // add leading zero if necessary
-
-  // const folderName = `${year}-${month}-${day}`;
-  // const downloadDir = app.getPath('downloads');
-
-  // console.log(`Folder "${folderName}" created successfully in "${downloadDir}"`);
-  
-  // fs.mkdir(`${downloadDir}/${folderName}`, (err) => {
-  //   if (err) {
-  //     console.error(err);
-  //   } else {
-  //     console.log(`Folder "${folderName}" created successfully in "${downloadDir}"`);
-  //   }
-  // });
 
   expressApp.listen(4089, () => {
     console.log('Express server running on port 4089');

@@ -2,16 +2,84 @@
 <html>
   <head>
     <title>About</title>
+
+    <style>
+      body {
+        background: hsla(260, 95%, 35%, 1);
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-image: radial-gradient(top, circle cover, hsla(260, 95%, 25%, 1)20%, hsla(260, 95%, 15%, 1) 80%);
+        cursor: move;
+        font-family: 'Poiret One', cursive;
+      }
+    </style>
   </head>
   <body>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
-      </ul>
-    </nav>
-    <h1>About Page</h1>
-    <p>This is the about page content {{ user.user.first_name }}.</p>
+    <canvas id='canv'></canvas>
+
+    <script>
+      var c = document.getElementById('canv');
+      var $ = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      var midX = c.width / 2;
+      var midY = c.height / 2;
+      var arr = [];
+      var cols = [
+        'hsla(206,79%, 41%, 1)',
+        'hsla(175,100%,32%,1)',
+        'hsla(91,53%,51%,1)',
+        'hsla(41,91%,57%,1)',
+        'hsla(13,84%,57%,1)',
+        'hsla(342,83%,53%,1)',
+        'hsla(272,51%,37%,1)'
+      ];
+      var midX, midY;
+
+      var hc = function(x, y, rad, col, ang) {
+        $.beginPath();
+        $.shadowColor = 'hsla(0,0%,0%,.4)';
+        $.shadowBlur = 30;
+        $.fillStyle = col;
+        $.arc(x, y, rad, ang, ang + Math.PI, true);
+        $.fill();
+        $.closePath();
+      };
+
+      var draw = function(rad, col, sp) {
+        var obj = {};
+        obj.rad = rad;
+        obj.col = col;
+        obj.sp = sp;
+        obj.dir = 0;
+        obj.ang = Math.PI / 180;
+        obj.draw = function() {
+          hc(midX, midY, obj.rad, obj.col, obj.ang);
+          obj.dir += Math.PI / 180;
+          obj.ang += Math.PI / 180 * Math.sin(obj.dir) * obj.sp;
+
+        };
+        return obj;
+      };
+
+      var set = function() {
+        for (var i in cols) {
+          arr.push(draw(10 + i * 25, cols[i], 5 + Math.random() * 7));
+        }
+      };
+
+      var go = function() {
+        $.clearRect(0, 0, c.width, c.height);
+        for (var i in arr) {
+          arr[i].draw();
+        }
+        window.requestAnimationFrame(go);
+      };
+      set();
+      go();
+    </script>
   </body>
 </html>

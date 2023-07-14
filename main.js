@@ -10,9 +10,16 @@ const multer = require('multer');
 const pdf = require('html-pdf');
 const upload = multer({ dest: 'uploads/' }).single('csv');
 const session = require('express-session');
+const screenshot = require('screenshot-desktop');
+const { Readable } = require('stream');
+const { Blob } = require('buffer');
 
 let mainWindow;
 let aboutWindow;
+
+
+
+
 
 const menuTemplate = [  {    label: 'File',    submenu: [      { role: 'quit' }    ]
   },
@@ -54,7 +61,7 @@ function createWindow() {
     // open dev tools
     mainWindow.webContents.openDevTools()
 
-  mainWindow.loadURL('http://localhost:3005');
+  mainWindow.loadURL('http://localhost:4089');
 
   mainWindow.on('closed', function () {
     mainWindow = null;
@@ -162,14 +169,39 @@ app.on('ready', () => {
   expressApp.get('/contact', (req, res) => {
     res.render('contact');
   });
+  
+  expressApp.get('/screenshort', (req, res) => {
+    
+    // Capture the screenshot
+    screenshot({ screen: 'main', filename: `${datetime}.png` })
+    .then((imgPath) => {
+      console.log(`Screenshot saved: ${imgPath}`);
+    })
+    .catch((err) => {
+      console.error(`Failed to capture screenshot: ${err}`);
+    });
 
-  expressApp.get('/dashboard', isAuthenticated, (req, res) => {
+
+  });
+
+
+
+
+
+
+  expressApp.get('/dashboard', (req, res) => {
   // Access the user object from the session
   const user = req.session.user;
 
 
   console.log( 'usersing : => ' ,user);
   res.render('dashboard', { user});
+
+  if (req.session.isAuthenticated) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
 
   });
 
@@ -211,11 +243,129 @@ app.on('ready', () => {
   //   }
   // });
 
-  expressApp.listen(3005, () => {
-    console.log('Express server running on port 3005');
+  expressApp.listen(4089, () => {
+    console.log('Express server running on port 4089');
     createWindow();
   });
+
 });
+
+
+function takeScreenshot2() {
+  var datetime = Date.now();
+
+  // Capture the screenshot
+  screenshot({ screen: 'main', filename: `${datetime}.png` })
+    .then((imgPath) => {
+      fetch(`file://${imgPath}`)
+        .then((response) => response.blob())
+        .then((blob) => {
+          let formData = new FormData();
+          formData.append('image', blob, `${datetime}.png`);
+
+          axios
+            .post('http://erp.test/api/save_screenshot', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            })
+            .then((response) => {
+              console.log('Screenshot:');
+              console.dir(response.data, { depth: null });
+            })
+            .catch((error) => {
+              console.log('Error:', error);
+            });
+        });
+    })
+    .catch((err) => {
+      console.error(`Failed to capture screenshot: ${err}`);
+    });
+}
+
+// Rest of your code...
+
+
+// Rest of your code...
+
+
+function takeScreenshot() {
+
+
+var datetime = Date.now();
+
+  // Capture the screenshot
+  screenshot({ screen: 'main', filename: `${datetime}.png` })
+  .then((imgPath) => {
+
+    // Example usage
+    const imagePath = `${datetime}.png`;
+    const uploadUrl = 'http://erp.test/api/save_screenshort';
+
+    uploadImage(imagePath, uploadUrl);
+
+  })
+  .catch((err) => {
+    console.error(`Failed to capture screenshot: ${err}`);
+  });
+}
+
+function callScreenshot() {
+  const delay = Math.random() * 1 * 60 * 1000; // 5 minutes
+  
+  setTimeout(() => {
+    takeScreenshot();
+    callScreenshot(); // Call the function again to repeat the process
+  }, delay);
+
+}
+
+
+callScreenshot();
+
+
+// update images to erp portal start
+
+// Function to convert a Buffer to a Blob
+function bufferToBlob(buffer) {
+  const readable = new Readable();
+  readable._read = () => {};
+  readable.push(buffer);
+  readable.push(null);
+
+  return new Blob([readable.read()]);
+}
+
+
+// Function to upload an image using Axios
+async function uploadImage(imagePath, uploadUrl) {
+  try {
+    const imageBuffer = fs.readFileSync(imagePath);
+    const imageBlob = bufferToBlob(imageBuffer);
+
+    const formData = new FormData();
+    formData.append('image', imageBlob, imagePath);
+
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+
+    const response = await axios.post(uploadUrl, formData, {
+      headers: headers,
+    });
+
+    console.log('Image uploaded successfully:', response.data.message);
+  } catch (error) {
+    console.error('Error while uploading image:', error.message);
+  }
+}
+
+
+
+
+// test end
+
+
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

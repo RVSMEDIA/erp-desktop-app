@@ -383,6 +383,30 @@ function userLogin() {
 
 }
 
+
+// Function to clear the data.json file
+function clearDataFile(filePath) {
+  // Create an empty JSON object
+  const emptyData = {};
+
+  // Convert the empty object to JSON format
+  const emptyJsonData = JSON.stringify(emptyData);
+
+  // Write the empty JSON data to the file
+  fs.writeFile(filePath, emptyJsonData, (err) => {
+    if (err) {
+      console.error('Error clearing JSON file:', err);
+    } else {
+      console.log('Data.json file cleared successfully.');
+    }
+  });
+}
+
+// Usage example
+const filePath = 'data.json';
+clearDataFile(filePath);
+
+
 // test end
 
 

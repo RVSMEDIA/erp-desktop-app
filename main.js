@@ -17,7 +17,7 @@ const { Blob } = require('buffer');
 let mainWindow;
 let aboutWindow;
 
-
+let screenshotIntervals = [];
 
 
 
@@ -121,7 +121,16 @@ app.on('ready', () => {
   expressApp.post('/logout', (req, res) => {
     const filePath = 'data.json';
     clearDataFile(filePath);
-    res.redirect(req.originalUrl);
+
+    // Stop all screenshot processes when the user logs out
+    stopAllScreenshotProcesses();
+
+
+    // const intervalId =  callScreenshot();
+    // Clear the scheduled screenshot
+    // clearInterval(intervalId);
+    // res.redirect(req.originalUrl);
+    //expressApp.close(); // close server
     res.render('login');
   });
 
@@ -153,6 +162,7 @@ app.on('ready', () => {
             callScreenshot();
             res.render('dashboard', {user: jsonData});
           } else {
+            stopAllScreenshotProcesses();
             // Object doesn't exist, set session accordingly
             console.log('Session: Object does not exist');
             res.render('login');
@@ -255,10 +265,11 @@ function takeScreenshot() {
   screenshot({ screen: 'main', filename: `${datetime}.png` })
   .then((imgPath) => {
 
+
     // Example usage
     const imagePath = `${datetime}.png`;
     const uploadUrl = 'http://erp.test/api/save_screenshort';
-
+    console.log('Taking a screenshot...');
     uploadImage(imagePath, uploadUrl);
   })
   .catch((err) => {
@@ -268,15 +279,34 @@ function takeScreenshot() {
 
 function callScreenshot() {
   const delay = Math.random() * 1 * 60 * 1000; // 5 minutes
-  
-  setTimeout(() => {
+  console.log('callscreenshort started ....');
+  // setTimeout(() => {
+  //   takeScreenshot();
+  //   callScreenshot(); // Call the function again to repeat the process
+  // }, delay);
+
+  const intervalId = setInterval(() =>{
     takeScreenshot();
-    callScreenshot(); // Call the function again to repeat the process
   }, delay);
+
+  console.log(intervalId);
+  screenshotIntervals.push(intervalId);
+  // return intervalId;
 
 }
 
 
+
+// Function to stop all screenshot processes
+// Function to stop all screenshot processes
+function stopAllScreenshotProcesses() {
+  if (screenshotIntervals && screenshotIntervals.length > 0) {
+    screenshotIntervals.forEach((intervalId) => {
+      clearInterval(intervalId);
+    });
+    screenshotIntervals = []; // Clear the array
+  }
+}
 // callScreenshot();
 // userLogin();
 

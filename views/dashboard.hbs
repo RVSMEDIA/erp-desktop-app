@@ -50,10 +50,12 @@
     </style>
   </head>
   <body>
+      <form method="post" action="/logout">
     <div class="logout">
-      <p>Jasjeet Khipal</p>
-      <button id="logout">Logout</button>
+      <p>{{user.first_name}} {{user.last_name}}</p>
+        <button id="logout" type="submit">Logout</button>
     </div>
+      </form>
     <canvas id='canv'></canvas>
 
     <script>

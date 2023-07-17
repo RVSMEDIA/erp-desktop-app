@@ -114,9 +114,56 @@ app.on('ready', () => {
     res.send(`File created: ${name}`);
   });
 
-  expressApp.get('/home', (req, res) => {
-    res.redirect('/');
+  expressApp.get('/dashboard', (req, res) => {
+    res.render('dashboard');
   });
+
+  expressApp.post('/logout', (req, res) => {
+    const filePath = 'data.json';
+    clearDataFile(filePath);
+    res.redirect(req.originalUrl);
+    res.render('login');
+  });
+
+  expressApp.get('/', userLogin );
+
+  function userLogin(req, res) {
+
+    // Specify the file path
+    const filePath = 'data.json';
+  
+    // Read the JSON file
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        console.error('Error reading JSON file:', err);
+      } else {
+        try {
+          // Parse the JSON data
+          const jsonData = JSON.parse(data);
+
+          console.log(jsonData, 'jsonData');
+  
+          // Check if the desired object exists
+          const hasObject = jsonData.hasOwnProperty('email');
+  
+          // Decide session based on the existence of the object
+          if (hasObject) {
+            // Object exists, set session accordingly
+            console.log('Session: Object exists');
+            callScreenshot();
+            res.render('dashboard', {user: jsonData});
+          } else {
+            // Object doesn't exist, set session accordingly
+            console.log('Session: Object does not exist');
+            res.render('login');
+          }
+        } catch (error) {
+          console.error('Error parsing JSON data:', error);
+        }
+      }
+    });
+  
+  }
 
   expressApp.post('/', upload, (req, res) => {
 
@@ -124,8 +171,6 @@ app.on('ready', () => {
       email: req.body.email,
       password: req.body.password,
     }
-
-    
 
     axios.post('http://erp.test/api/login', data ).then(response =>{
         if(response.data.auth === 'fail'){
@@ -146,10 +191,11 @@ app.on('ready', () => {
             if (err) {
               console.error('Error writing JSON file:', err);
             } else {
-              console.log('Data written to JSON file successfully.');
+              callScreenshot();
+              console.log('Data written to JSON file successfully.', user);
+              res.render('dashboard', {user: user});
             }
           });
-
           
           // Store the user object in the session
           // req.session.user = JSON.stringify(response);
@@ -157,7 +203,7 @@ app.on('ready', () => {
           req.session.isAuthenticated = true;
           // console.log('success', user)
 
-          res.redirect('/dashboard');
+          
         }
     }).catch((err) => {
       console.log('error', err)
@@ -168,23 +214,13 @@ app.on('ready', () => {
   });
 
  
-  expressApp.get('/', (req, res) => {
-    if (req.session.isAuthenticated) {
-      // User session exists, redirect to the dashboard
-      res.redirect('/dashboard');
-    } else {
-      // User session does not exist, redirect to login
-      res.redirect('/login');
-    }
-  });
+  
 
   expressApp.get('/about', (req, res) => {
     res.render('about');
   });
 
   expressApp.get('/login', (req, res) => {
-
-    userLogin();
     res.render('login');
   });
   
@@ -204,31 +240,6 @@ app.on('ready', () => {
   });
 
 
-  // expressApp.get('/dashboard', (req, res) => {
-  //   // Access the user object from the session
-  //   const user = req.session.user;
-
-
-  //   console.log( 'usersing : => ' ,user);
-  //   res.render('dashboard', { user});
-
-  //   if (req.session.isAuthenticated) {
-  //     next();
-  //   } else {
-  //     res.redirect('/login');
-  //   }
-
-  // });
-
-
-
-  // Route for dashboard
-  expressApp.get('/dashboard', isAuthenticated, (req, res) => {
-    // Render the dashboard view
-    res.render('dashboard');
-  });
-
-
 
   expressApp.listen(4089, () => {
     console.log('Express server running on port 4089');
@@ -237,50 +248,9 @@ app.on('ready', () => {
 
 });
 
-
-function takeScreenshot2() {
-  var datetime = Date.now();
-
-  // Capture the screenshot
-  screenshot({ screen: 'main', filename: `${datetime}.png` })
-    .then((imgPath) => {
-      fetch(`file://${imgPath}`)
-        .then((response) => response.blob())
-        .then((blob) => {
-          let formData = new FormData();
-          formData.append('image', blob, `${datetime}.png`);
-
-          axios
-            .post('http://erp.test/api/save_screenshot', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            })
-            .then((response) => {
-              console.log('Screenshot:');
-              console.dir(response.data, { depth: null });
-            })
-            .catch((error) => {
-              console.log('Error:', error);
-            });
-        });
-    })
-    .catch((err) => {
-      console.error(`Failed to capture screenshot: ${err}`);
-    });
-}
-
-// Rest of your code...
-
-
-// Rest of your code...
-
-
 function takeScreenshot() {
 
-
-var datetime = Date.now();
-
+  var datetime = Date.now();
   // Capture the screenshot
   screenshot({ screen: 'main', filename: `${datetime}.png` })
   .then((imgPath) => {
@@ -290,7 +260,6 @@ var datetime = Date.now();
     const uploadUrl = 'http://erp.test/api/save_screenshort';
 
     uploadImage(imagePath, uploadUrl);
-
   })
   .catch((err) => {
     console.error(`Failed to capture screenshot: ${err}`);
@@ -308,8 +277,8 @@ function callScreenshot() {
 }
 
 
-callScreenshot();
-
+// callScreenshot();
+// userLogin();
 
 // update images to erp portal start
 
@@ -347,43 +316,6 @@ async function uploadImage(imagePath, uploadUrl) {
   }
 }
 
-
-
-
-function userLogin() {
-
-  // Specify the file path
-  const filePath = 'data.json';
-
-  // Read the JSON file
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      console.error('Error reading JSON file:', err);
-    } else {
-      try {
-        // Parse the JSON data
-        const jsonData = JSON.parse(data);
-
-        // Check if the desired object exists
-        const hasObject = jsonData.hasOwnProperty('email');
-
-        // Decide session based on the existence of the object
-        if (hasObject) {
-          // Object exists, set session accordingly
-          console.log('Session: Object exists');
-        } else {
-          // Object doesn't exist, set session accordingly
-          console.log('Session: Object does not exist');
-        }
-      } catch (error) {
-        console.error('Error parsing JSON data:', error);
-      }
-    }
-  });
-
-}
-
-
 // Function to clear the data.json file
 function clearDataFile(filePath) {
   // Create an empty JSON object
@@ -404,12 +336,7 @@ function clearDataFile(filePath) {
 
 // Usage example
 const filePath = 'data.json';
-clearDataFile(filePath);
-
-
-// test end
-
-
+// clearDataFile(filePath);
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

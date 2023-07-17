@@ -340,7 +340,10 @@ async function uploadImage(imagePath, uploadUrl) {
       headers: headers,
     });
 
+    deleteImage(imagePath);
     console.log('Image uploaded successfully:', response.data.message);
+
+
   } catch (error) {
     console.error('Error while uploading image:', error.message);
   }
@@ -363,6 +366,23 @@ function clearDataFile(filePath) {
     }
   });
 }
+
+
+function deleteImage(filePath)
+{
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error('Error deleting image file:', err);
+      res.status(500).send('Error deleting image file');
+    } else {
+      console.log('Image file deleted successfully.');
+      res.send('Image file deleted');
+    }
+  });
+
+}
+
+
 
 // Usage example
 const filePath = 'data.json';

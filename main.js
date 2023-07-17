@@ -373,10 +373,10 @@ function deleteImage(filePath)
   fs.unlink(filePath, (err) => {
     if (err) {
       console.error('Error deleting image file:', err);
-      res.status(500).send('Error deleting image file');
+      // res.status(500).send('Error deleting image file');
     } else {
       console.log('Image file deleted successfully.');
-      res.send('Image file deleted');
+      // res.send('Image file deleted');
     }
   });
 

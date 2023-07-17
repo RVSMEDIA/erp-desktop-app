@@ -16,6 +16,7 @@ const { Blob } = require('buffer');
 
 let mainWindow;
 let aboutWindow;
+let logged_user = [];
 
 let screenshotIntervals = [];
 
@@ -159,9 +160,11 @@ app.on('ready', () => {
           if (hasObject) {
             // Object exists, set session accordingly
             console.log('Session: Object exists');
+            logged_user.push(jsonData);
             callScreenshot();
             res.render('dashboard', {user: jsonData});
           } else {
+            logged_user = [];
             stopAllScreenshotProcesses();
             // Object doesn't exist, set session accordingly
             console.log('Session: Object does not exist');
@@ -203,6 +206,7 @@ app.on('ready', () => {
             } else {
               callScreenshot();
               console.log('Data written to JSON file successfully.', user);
+              logged_user.push(user);
               res.render('dashboard', {user: user});
             }
           });
@@ -324,13 +328,14 @@ function bufferToBlob(buffer) {
 
 
 // Function to upload an image using Axios
-async function uploadImage(imagePath, uploadUrl) {
+async function uploadImage(imagePath, uploadUrl, user) {
   try {
     const imageBuffer = fs.readFileSync(imagePath);
     const imageBlob = bufferToBlob(imageBuffer);
 
     const formData = new FormData();
     formData.append('image', imageBlob, imagePath);
+    formData.append('id', logged_user[0].id);
 
     const headers = {
       'Content-Type': 'multipart/form-data',
@@ -342,6 +347,7 @@ async function uploadImage(imagePath, uploadUrl) {
 
     deleteImage(imagePath);
     console.log('Image uploaded successfully:', response.data.message);
+    // console.log('logged_user : ', logged_user);
 
 
   } catch (error) {

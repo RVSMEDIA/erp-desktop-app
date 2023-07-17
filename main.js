@@ -40,7 +40,7 @@ Menu.setApplicationMenu(menu)
 
 function createAboutWindow() {
   const aboutWindow = new BrowserWindow({
-    width: 700,
+    width: 1700,
     height: 450,
     webPreferences: {
       nodeIntegration: true

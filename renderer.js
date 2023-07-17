@@ -3,8 +3,15 @@ const filePathElement = document.getElementById('filePath')
 const jsonOutput = document.getElementById('jsonOutput')
 const dd = document.getElementById('dd')
 
+const logout = document.getElementById('logout')
+
 // Get the elements we need
 const counterElement = document.getElementById('counter');
+
+
+logout.addEventListener('click', () =>{
+  console.log('jerjerj');
+});
 
 btn.addEventListener('click', async () => {
     const filePath = await window.electronAPI.openFile()

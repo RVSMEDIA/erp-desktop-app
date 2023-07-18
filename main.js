@@ -7,7 +7,6 @@ const handlebars = require('hbs');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const multer = require('multer');
-const pdf = require('html-pdf');
 const upload = multer({ dest: 'uploads/' }).single('csv');
 const session = require('express-session');
 const screenshot = require('screenshot-desktop');
@@ -22,13 +21,24 @@ let screenshotIntervals = [];
 
 
 
-const menuTemplate = [  {    label: 'File',    submenu: [      { role: 'quit' }    ]
+const menuTemplate = [  
+  {
+    label: 'Home',
+    click: () => {
+      mainWindow.loadURL('http://localhost:3007');
+    }
+  },
+  {   label: 'File',    
+    submenu: [      
+    { role: 'quit' }  
+    ]
   },
   {
     label: 'About',
     click: () => {
       // Create a new window when "About" is clicked
-      createAboutWindow()
+      // createAboutWindow()
+      mainWindow.webContents.loadFile('about.html');
     }
   }
 ]
@@ -55,14 +65,17 @@ function createAboutWindow() {
 function createWindow() {
   mainWindow = new BrowserWindow(
     { 
-        width: 700,
-        height: 450
+        width: 1700,
+        height: 450,
+        resizable: false // Disables window resizing
     });
 
     // open dev tools
     mainWindow.webContents.openDevTools()
 
-  mainWindow.loadURL('http://localhost:4089');
+  mainWindow.setSize(700, 450) // Fix the window size to 800x600
+
+  mainWindow.loadURL('http://localhost:3007');
 
   mainWindow.on('closed', function () {
     mainWindow = null;
@@ -256,8 +269,8 @@ app.on('ready', () => {
 
 
 
-  expressApp.listen(4089, () => {
-    console.log('Express server running on port 4089');
+  expressApp.listen(3007, () => {
+    console.log('Express server running on port 3007');
     createWindow();
   });
 

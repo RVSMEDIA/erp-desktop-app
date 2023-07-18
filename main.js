@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, Tray, nativeImage   } = require('electron');
 const express = require('express');
 const ejs = require('ejs');
 const path = require('path');
@@ -19,7 +19,7 @@ let logged_user = [];
 
 let screenshotIntervals = [];
 
-
+let tray = null
 
 const menuTemplate = [  
   {
@@ -28,18 +28,17 @@ const menuTemplate = [
       mainWindow.loadURL('http://localhost:3007');
     }
   },
-  {   label: 'File',    
-    submenu: [      
-    { role: 'quit' }  
-    ]
-  },
+  
+  // {
+  //   label: 'About',
+  //   click: () => {
+  //     // Create a new window when "About" is clicked
+  //     // createAboutWindow()
+  //     mainWindow.webContents.loadFile('about.html');
+  //   }
+  // },
   {
-    label: 'About',
-    click: () => {
-      // Create a new window when "About" is clicked
-      // createAboutWindow()
-      mainWindow.webContents.loadFile('about.html');
-    }
+       role: 'quit' 
   }
 ]
 
@@ -83,6 +82,23 @@ function createWindow() {
 }
 
 app.on('ready', () => {
+
+  const iconPath = path.join(__dirname, 'assets/icon.png');
+
+  tray = new Tray(iconPath)
+
+  // mainWindow.tray = new Tray(nativeImage.createFromPath(iconPath));
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Item1', type: 'radio' },
+    { label: 'Item2', type: 'radio' },
+    { label: 'Item3', type: 'radio', checked: true },
+    { label: 'Item4', type: 'radio' }
+  ])
+
+  tray.setToolTip('Rvs Tracker')
+
+  tray.setContextMenu(menu)
 
   const expressApp = express();
 
@@ -293,6 +309,8 @@ function takeScreenshot() {
     // Example usage
     const imagePath = `${datetime}.png`;
     const uploadUrl = 'http://erp.test/api/save_screenshort';
+
+    // const uploadUrl = 'https://app.idevelopment.site/api/save_screenshort';
     console.log('Taking a screenshot...');
     uploadImage(imagePath, uploadUrl);
   })
@@ -310,7 +328,7 @@ function callScreenshot() {
     
     const intervalId = setInterval(() =>{
       takeScreenshot();
-      
+
       console.log('callscreenshort started  delay....', delay);
 
   }, delay);
@@ -321,9 +339,6 @@ function callScreenshot() {
 
 }
 
-
-
-// Function to stop all screenshot processes
 // Function to stop all screenshot processes
 function stopAllScreenshotProcesses() {
   if (screenshotIntervals && screenshotIntervals.length > 0) {

@@ -65,13 +65,13 @@ function createAboutWindow() {
 function createWindow() {
   mainWindow = new BrowserWindow(
     { 
-        width: 1700,
+        width: 700,
         height: 450,
         resizable: false // Disables window resizing
     });
 
     // open dev tools
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
 
   mainWindow.setSize(700, 450) // Fix the window size to 800x600
 
@@ -133,7 +133,8 @@ app.on('ready', () => {
   });
 
   expressApp.post('/logout', (req, res) => {
-    const filePath = 'data.json';
+    // const filePath = 'data.json';
+    const filePath = path.join(__dirname, 'data.json');
     clearDataFile(filePath);
     logged_user = [];
     // Stop all screenshot processes when the user logs out
@@ -152,8 +153,10 @@ app.on('ready', () => {
 
   function userLogin(req, res) {
 
+    // res.send('dashboard ..... ');
+    
     // Specify the file path
-    const filePath = 'data.json';
+    const filePath = path.join(__dirname, 'data.json');
   
     // Read the JSON file
     fs.readFile(filePath, (err, data) => {
@@ -164,7 +167,7 @@ app.on('ready', () => {
           // Parse the JSON data
           const jsonData = JSON.parse(data);
 
-          console.log(jsonData, 'jsonData');
+          // console.log(jsonData, 'jsonData');
   
           // Check if the desired object exists
           const hasObject = jsonData.hasOwnProperty('email');
@@ -175,12 +178,14 @@ app.on('ready', () => {
             console.log('Session: Object exists');
             logged_user.push(jsonData);
             callScreenshot();
+            // res.send('dashboard');
             res.render('dashboard', {user: jsonData});
           } else {
             logged_user = [];
             stopAllScreenshotProcesses();
             // Object doesn't exist, set session accordingly
             console.log('Session: Object does not exist');
+            // res.send('login');
             res.render('login');
           }
         } catch (error) {
@@ -211,7 +216,8 @@ app.on('ready', () => {
           const jsonData = JSON.stringify(user);
 
           // Specify the file path
-          const filePath = 'data.json';
+          // const filePath = 'data.json';
+          const filePath = path.join(__dirname, 'data.json');
 
           // Write data to the JSON file
           fs.writeFile(filePath, jsonData, (err) => {
@@ -297,14 +303,16 @@ function takeScreenshot() {
 
 function callScreenshot() {
   const delay = Math.random() * 6 * 60 * 1000; // 5 minutes
-  console.log('callscreenshort started ....');
   // setTimeout(() => {
-  //   takeScreenshot();
-  //   callScreenshot(); // Call the function again to repeat the process
-  // }, delay);
+    //   takeScreenshot();
+    //   callScreenshot(); // Call the function again to repeat the process
+    // }, delay);
+    
+    const intervalId = setInterval(() =>{
+      takeScreenshot();
+      
+      console.log('callscreenshort started  delay....', delay);
 
-  const intervalId = setInterval(() =>{
-    takeScreenshot();
   }, delay);
 
   console.log(intervalId);
@@ -405,7 +413,7 @@ function deleteImage(filePath)
 
 
 // Usage example
-const filePath = 'data.json';
+// const filePath = 'data.json';
 // clearDataFile(filePath);
 
 app.on('window-all-closed', function () {

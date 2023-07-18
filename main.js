@@ -55,7 +55,7 @@ function createAboutWindow() {
 function createWindow() {
   mainWindow = new BrowserWindow(
     { 
-        width: 1700,
+        width: 700,
         height: 450
     });
 
@@ -122,7 +122,7 @@ app.on('ready', () => {
   expressApp.post('/logout', (req, res) => {
     const filePath = 'data.json';
     clearDataFile(filePath);
-
+    logged_user = [];
     // Stop all screenshot processes when the user logs out
     stopAllScreenshotProcesses();
 
@@ -188,6 +188,7 @@ app.on('ready', () => {
     axios.post('http://erp.test/api/login', data ).then(response =>{
         if(response.data.auth === 'fail'){
             console.log(response)
+            logged_user = [];
             // event.reply("login-failed", err.errorSummary);
             return;
         }else{
@@ -282,7 +283,7 @@ function takeScreenshot() {
 }
 
 function callScreenshot() {
-  const delay = Math.random() * 1 * 60 * 1000; // 5 minutes
+  const delay = Math.random() * 6 * 60 * 1000; // 5 minutes
   console.log('callscreenshort started ....');
   // setTimeout(() => {
   //   takeScreenshot();

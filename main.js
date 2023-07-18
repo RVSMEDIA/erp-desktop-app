@@ -81,6 +81,7 @@ function createWindow() {
   });
 }
 
+
 app.on('ready', () => {
 
   const iconPath = path.join(__dirname, 'assets/icon.png');
@@ -219,7 +220,7 @@ app.on('ready', () => {
       password: req.body.password,
     }
 
-    axios.post('http://erp.test/api/login', data ).then(response =>{
+    axios.post('https://app.idevelopment.site/api/login', data ).then(response =>{
         if(response.data.auth === 'fail'){
             console.log(response)
             logged_user = [];
@@ -300,6 +301,8 @@ app.on('ready', () => {
 
 function takeScreenshot() {
 
+  // writeLog('takeScreenshot(): ');
+
   var datetime = Date.now();
   // Capture the screenshot
   screenshot({ screen: 'main', filename: `${datetime}.png` })
@@ -308,14 +311,16 @@ function takeScreenshot() {
 
     // Example usage
     const imagePath = `${datetime}.png`;
-    const uploadUrl = 'http://erp.test/api/save_screenshort';
+    // const uploadUrl = 'http://erp.test/api/save_screenshort';
 
-    // const uploadUrl = 'https://app.idevelopment.site/api/save_screenshort';
+    const uploadUrl = 'https://app.idevelopment.site/api/save_screenshort';
     console.log('Taking a screenshot...');
     uploadImage(imagePath, uploadUrl);
   })
   .catch((err) => {
     console.error(`Failed to capture screenshot: ${err}`);
+    // writeLog(`Failed to capture screenshot: ${err}`);
+
   });
 }
 
@@ -426,10 +431,22 @@ function deleteImage(filePath)
 }
 
 
+// function writeLog(data) {
 
-// Usage example
-// const filePath = 'data.json';
-// clearDataFile(filePath);
+//   var pdfFileName = `${downloadDir}/${folderName}/log.text`;
+//   fs.appendFile(pdfFileName, data + '\n', (err) => {
+//     if (err) {
+//       console.error('Failed to write to log file:', err);
+//     }
+//   });
+// }
+
+// Log an error
+//writeLog('Error occurred: ' + err.message);
+// writeLog('Debug message: Some debug info');
+
+
+
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

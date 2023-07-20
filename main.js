@@ -3,6 +3,7 @@ const express = require('express');
 const ejs = require('ejs');
 const path = require('path');
 const axios = require('axios');
+var cors = require('cors')
 const handlebars = require('hbs');
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -64,15 +65,15 @@ function createAboutWindow() {
 function createWindow() {
   mainWindow = new BrowserWindow(
     { 
-        width: 700,
+        width: 1700,
         height: 450,
         resizable: false // Disables window resizing
     });
 
     // open dev tools
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
-  mainWindow.setSize(700, 450) // Fix the window size to 800x600
+  //mainWindow.setSize(700, 450) // Fix the window size to 800x600
 
   mainWindow.loadURL('http://localhost:3007');
 
@@ -88,6 +89,10 @@ app.on('ready', () => {
 
   tray = new Tray(iconPath)
 
+  tray.on('click', () =>{
+    mainWindow.isVisible()?mainWindow.hide():mainWindow.show()
+  })
+
   // mainWindow.tray = new Tray(nativeImage.createFromPath(iconPath));
 
   const contextMenu = Menu.buildFromTemplate([
@@ -102,6 +107,9 @@ app.on('ready', () => {
   tray.setContextMenu(menu)
 
   const expressApp = express();
+
+  expressApp.use(cors())
+
 
   // Set up session middleware
   expressApp.use(session({
@@ -222,10 +230,11 @@ app.on('ready', () => {
 
     axios.post('https://app.idevelopment.site/api/login', data ).then(response =>{
         if(response.data.auth === 'fail'){
-            console.log(response)
+            // console.log('response ====', response)
             logged_user = [];
-            // event.reply("login-failed", err.errorSummary);
-            return;
+            const errorMessage = 'Invalid email or password';
+            res.render('login', { errorMessage });
+            // res.json({ error: errorMessage});
         }else{
           user = response.data.user;
 
@@ -240,6 +249,7 @@ app.on('ready', () => {
           fs.writeFile(filePath, jsonData, (err) => {
             if (err) {
               console.error('Error writing JSON file:', err);
+              return err;
             } else {
               callScreenshot();
               console.log('Data written to JSON file successfully.', user);

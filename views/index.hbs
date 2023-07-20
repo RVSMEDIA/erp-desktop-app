@@ -115,7 +115,7 @@ button {
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Enter your password" name="password" value="admin0066">
 
-            <button type="submit">Login</button>
+            <button type="submit" id="submit">Login</button>
             </form>
         </div>
     </div>
@@ -129,7 +129,10 @@ button {
  <script>
     $(document).ready(function() {
 
-    
+      $('#submit').on('click', function(e) {
+        e.preventDefault();
+        console.log('hjerere');
+      });
 
     });
   </script>

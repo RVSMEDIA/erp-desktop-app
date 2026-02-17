@@ -69,3 +69,17 @@ run these commands
 `sudo mv install-track-360.sh /usr/local/bin/install-track-360`
 
 `sudo install-track-360`
+
+You can enable the X using the terminal. Open the terminal and run the command:
+
+`$ sudo nano /etc/gdm3/custom.conf`
+
+there you will find
+
+`WaylandEnable=true`
+
+change it to
+
+`WaylandEnable=false`
+
+`And restart the system.`
